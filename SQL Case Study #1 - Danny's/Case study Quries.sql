@@ -5,12 +5,12 @@
 # Creating a separate database using MYSQL WORKBENCH 8.0 CE
 use dannys_diner;
 
-CREATE TABLE orders (
+CREATE TABLE ORDERS (
   `customer_id` VARCHAR(1),
   `order_date` DATE,
   `product_id` INTEGER
 );
-INSERT INTO sales VALUES
+INSERT INTO ORDERS VALUES
   ('A', '2021-01-01', '1'),
   ('A', '2021-01-01', '2'),
   ('A', '2021-01-07', '2'),
