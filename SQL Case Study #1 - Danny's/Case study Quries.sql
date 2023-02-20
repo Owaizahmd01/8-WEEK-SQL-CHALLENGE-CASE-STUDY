@@ -40,7 +40,7 @@ VALUES
   ('3', 'ramen', '12');
   
 
-CREATE TABLE members (
+CREATE TABLE IF NOT EXISTS members(
   `customer_id` VARCHAR(1),
   `join_date` DATE
 );
