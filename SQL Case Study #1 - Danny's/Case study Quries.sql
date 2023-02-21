@@ -194,23 +194,49 @@ FROM(
        
 -- Q8. What are the total items and amount spent for each member before they became a member?
 /* --------- SOLUTION --------- */
+WITH CTE AS
+      (SELECT O.CUSTOMER_ID,
+              O.ORDER_DATE,
+              MS.JOIN_DATE,
+              M.PRODUCT_NAME, 
+              M.PRICE
+              FROM MEMBERS MS
+              JOIN ORDERS O ON O.CUSTOMER_ID = MS.CUSTOMER_ID
+              JOIN MENU   M ON M.PRODUCT_ID  = O.PRODUCT_ID
+              WHERE ORDER_DATE < JOIN_DATE
+              ORDER BY 1,2)
+SELECT 
+	CUSTOMER_ID, 
+    GROUP_CONCAT(PRODUCT_NAME) AS PURCHASED_ITEM,
+    COUNT(PRODUCT_NAME) AS TOTAL_ITEMS,
+    SUM(PRICE) AS TOTAL_AMOUNT
+FROM CTE
+GROUP BY CUSTOMER_ID
+ORDER BY CUSTOMER_ID;
+
+/* Q9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - 
+--how many points would each customer have?*/
+/* --------- SOLUTION --------- */
+WITH CTE AS
+(SELECT *,
+       (CASE WHEN PRODUCT_NAME = 'SUSHI' THEN PRICE*20
+		    ELSE PRICE*10
+	   END) AS TOTAL_POINTS
+       FROM MENU M)
+       
+SELECT DISTINCT O.CUSTOMER_ID,
+       SUM(C.TOTAL_POINTS) OVER(PARTITION BY O.CUSTOMER_ID) AS TOTAL_POINTS
+       FROM ORDERS O
+       JOIN CTE C ON C.PRODUCT_ID = O.PRODUCT_ID
+       ORDER BY 1;
+
+/* Q10. In the first week after a customer joins the program (including their join date) 
+they earn 2x points on all items, not just sushi - 
+how many points do customer A and B have at the end of January?*/
+ /*------ SOLUTION --------- */
 
 
 
-
-
-          
-           
-           
-           
-           
-
-  
-  
-  
-  
-  
-  
   
   
   
