@@ -234,9 +234,17 @@ SELECT DISTINCT O.CUSTOMER_ID,
 they earn 2x points on all items, not just sushi - 
 how many points do customer A and B have at the end of January?*/
  /*------ SOLUTION --------- */
-
-
-
+SELECT
+        S.CUSTOMER_ID
+	,SUM(CASE
+                 WHEN (DATEDIFF(DAY, ME.JOIN_DATE, S.ORDER_DATE) BETWEEN 0 AND 7) OR (M.PRODUCT_ID = 1) THEN M.PRICE * 20
+                 ELSE M.PRICE * 10
+              END) AS POINTS
+FROM MEMBERS AS ME
+    INNER JOIN SALES AS S ON S.CUSTOMER_ID = ME.CUSTOMER_ID
+    INNER JOIN MENU AS M ON M.PRODUCT_ID = S.PRODUCT_ID
+WHERE S.ORDER_DATE >= ME.JOIN_DATE AND S.ORDER_DATE <= CAST('2021-01-31' AS DATE)
+GROUP BY S.CUSTOMER_ID
   
   
   
